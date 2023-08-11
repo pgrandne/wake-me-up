@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 
-export const Countdown = () =>{
+export const Countdown = ({date}) =>{
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] =useState(0);
 
     useEffect(() =>{
-        const target = new Date("12/08/2023 06:00:00")
+        const target = date
         
         const interval = setInterval(()=>{
             const today = new Date(); 
@@ -34,7 +34,7 @@ export const Countdown = () =>{
         <div className="time-wrapper">
             <button className="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white px-10 py-1.5 rounded-md">Make money</button>
             <div className="timer-inner text-center  text-xs text-gray-500 flex justify-center my-3 gap-1">
-                    <span className="text-center ">{hours} h {minutes} m {seconds} s </span>           
+                <span className="text-center ">{hours} h {minutes} m {seconds} s </span>           
             </div>         
         </div>
     )
