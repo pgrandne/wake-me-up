@@ -9,14 +9,14 @@ const Home: NextPage = () => {
       <Head>
         <title>Arbitrage for Everyone</title>
         <meta
-          content="Arbitrage for Everyone"
-          name="Arbitrage for Everyone"
+          content="Wake Me Up!"
+          name="Wake Me Up!"
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
       <main className="w-screen h-screen">
-        <div className="absolute top-2 right-3">
+        <div className="absolute top-1 md:top-2 right-1 md:right-2">
           <ConnectButton />
         </div>
         <div className="h-1/6 flex justify-center">
