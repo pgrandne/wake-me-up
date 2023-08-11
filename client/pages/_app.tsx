@@ -9,7 +9,7 @@ import {
   zoraTestnet,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { modeTest } from './chains';
+import { modeTest } from '../components/chains';
 import { AppProps } from 'next/app';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
