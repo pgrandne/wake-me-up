@@ -21,7 +21,7 @@ const Home: NextPage = () => {
         </div>
         <div className="h-1/6 flex justify-center">
           <h1 className="my-auto text-xl">
-            Wake Up Degen!
+            Wake Me Up!
           </h1>
         </div>
         <div className="h-4/6 my-auto">
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
         </div>
         <div className="h-1/6 text-center">
           <p className="my-auto">
-            Wake Up Degen!
+            Footer
           </p>
         </div>
 
