@@ -1,0 +1,40 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/home/perrin/Project/arbitrage_for_everyone/core/contracts/WakeMeUp.sol": {
+      "lastModificationDate": 1691862216090,
+      "contentHash": "25ef444797087a1bc24b946d53bfb17d",
+      "sourceName": "contracts/WakeMeUp.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.2 <0.9.0"
+      ],
+      "artifacts": [
+        "WakeMeUp"
+      ]
+    }
+  }
+}
