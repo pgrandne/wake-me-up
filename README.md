@@ -1,3 +1,14 @@
 # Wake Me Up for Superhack
 
-0x5761f867E7da80812fd325d2eF0cA9Ff81f9245e
+# Deployments
+| Network               | Address                                          |
+|-----------------------|--------------------------------------------------|
+| Optimism Goerli |(0x47579267a80115b0fBc7b4FF35Cef538738dD036)[https://goerli-optimism.etherscan.io/address/0x47579267a80115b0fBc7b4FF35Cef538738dD036]      |
+| Base Goerli|0x6925A6A9b4e73769734F4644DE07169FBC5f0C57   |
+| Mode Goerli |0xb577ED8dB5a965815b53d5141A83D1DEed438DBC|
+| Zora   |    |
+
+
+
+
+0xDe399850A92F69407a169f4Bcdf533CBcaA0A87a

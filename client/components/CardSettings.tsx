@@ -1,9 +1,13 @@
-import { useState } from "react"
-import { usePrepareContractWrite, useContractWrite } from 'wagmi'
+import { Dispatch, SetStateAction, useState } from "react"
+import { useContractWrite } from 'wagmi'
 import { ABI_WakeMeUp, goerliContract } from '../lib';
 import { SelectTime } from "./SelectTime";
+import { waitForTransaction } from '@wagmi/core'
 
-export const CardSettings = () => {
+export const CardSettings = ({ update, setUpdate }: {
+    update: boolean
+    setUpdate: Dispatch<SetStateAction<boolean>>
+}) => {
     const [scheduleWeek, setScheduleWeek] = useState({
         wakeupHour: 7,
         wakeupMinute: 0,
@@ -14,16 +18,25 @@ export const CardSettings = () => {
         wakeupMinute: 0
     })
 
-    const { config, error } = usePrepareContractWrite({
+    const { data, isLoading, isSuccess, write } = useContractWrite({
         address: goerliContract,
         abi: ABI_WakeMeUp,
         functionName: 'scheduleWakeup',
         args: [scheduleWeek.wakeupHour, scheduleWeek.wakeupMinute, scheduleWeekend.wakeupHour, scheduleWeekend.wakeupMinute],
+        onSuccess(data) {
+            waitForSchedule(data.hash)
+        }
     })
-    const { write } = useContractWrite(config)
+
+    const waitForSchedule = async (hash: any) => {
+        const data = await waitForTransaction({
+            hash,
+        })
+        setUpdate(!update)
+    }
 
     return (
-        <div className="container flex mx-auto my-auto w-full items-center justify-center">
+        <div className="card">
             <ul className="flex flex-col bg-gray-300 p-4">
                 <li className="border-gray-400 flex flex-row mb-2">
                     <div className="select-none cursor-pointer bg-gray-200 rounded-md flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">

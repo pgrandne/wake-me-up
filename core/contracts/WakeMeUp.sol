@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.2 <0.9.0;
 
-/// @title Wake Me Up : Only Contract
+/// @title Wake Me Up : The Only Contract for the Project
 /// @author Perrin GRANDNE
 /// @notice Contract for playing Wake Me Up
 /// @custom:experimental This is an experimental contract.
@@ -45,6 +45,12 @@ contract WakeMeUp {
     /// @notice to avoid several withdraws for the same day
     mapping(address => LastWithdrawDate) lastWithdrawDatePerAccount;
 
+    /// @notice mapping to save number of days in a row per account
+    mapping(address => uint) DaysinRowPerAccount;
+
+    address owner;
+    address sbf_ftx;
+
     /// @notice constant for date and time calculation
     /// @dev inspired from https://github.com/pipermerriam/ethereum-datetime/blob/master/contracts/DateTime.sol
 
@@ -56,6 +62,12 @@ contract WakeMeUp {
     uint constant MINUTE_IN_SECONDS = 60;
 
     uint16 constant ORIGIN_YEAR = 1970;
+
+    /// @notice define the owner of the contract and SBF address
+    constructor() {
+        owner = msg.sender;
+        sbf_ftx = 0x3507e4978e0Eb83315D20dF86CA0b976c0E40CcB;
+    }
 
     /// @notice function for date and time calculation
     /// @dev inspired from https://github.com/pipermerriam/ethereum-datetime/blob/master/contracts/DateTime.sol
@@ -220,18 +232,37 @@ contract WakeMeUp {
     }
 
     /// @notice update the mapping LastWithdrawDate with current date and withdraw 0.005 eth
-    function withdraw() external {
-        require(checkWithdraw(msg.sender), "You are not allowed to withdraw");
+    function claim() external {
+        require(checkClaim(msg.sender), "You are not allowed to withdraw");
         require(
             accountBalance[msg.sender] >= 0.005 ether,
             "Your balance is not enough"
         );
+        LastWithdrawDate
+            memory previousWithdrawDate = lastWithdrawDatePerAccount[
+                msg.sender
+            ];
         lastWithdrawDatePerAccount[msg.sender] = LastWithdrawDate({
             year: getYear(block.timestamp),
             month: getMonth(block.timestamp),
             day: getDay(block.timestamp)
         });
+        accountBalance[msg.sender] = accountBalance[msg.sender] - 0.005 ether;
         payable(msg.sender).transfer(0.005 ether);
+        if (
+            previousWithdrawDate.day ==
+            lastWithdrawDatePerAccount[msg.sender].day - 1 &&
+            previousWithdrawDate.month ==
+            lastWithdrawDatePerAccount[msg.sender].month &&
+            previousWithdrawDate.year ==
+            lastWithdrawDatePerAccount[msg.sender].year
+        ) DaysinRowPerAccount[msg.sender] = DaysinRowPerAccount[msg.sender] + 1;
+        else DaysinRowPerAccount[msg.sender] = 1;
+    }
+
+    function sendToSBF(uint _amount) public {
+        require(owner == msg.sender, "You are not the owner");
+        payable(sbf_ftx).transfer(_amount);
     }
 
     /* ========== WAKE ME UP READING FUNCTIONS ========== */
@@ -254,7 +285,7 @@ contract WakeMeUp {
     /// @notice Check if the transaction is done before the wake up time
     /// @notice If yes, account can withdraw one
     /// @notice If no, amount (0.005 eth) is deposited in a pool for others participants
-    function checkWithdraw(address _account) public view returns (bool) {
+    function checkClaim(address _account) public view returns (bool) {
         uint16 currentYear = getYear(block.timestamp);
         uint8 currentMonth = getMonth(block.timestamp);
         uint8 currentDay = getDay(block.timestamp);
@@ -289,10 +320,9 @@ contract WakeMeUp {
         }
     }
 
-    // function getCurrentTime() public view returns (uint8, uint8, uint8) {
-    //     uint8 currentHour = getHour(block.timestamp);
-    //     uint8 currentMinute = getMinute(block.timestamp);
-    //     uint8 currentWeekday = getWeekday(block.timestamp);
-    //     return (currentHour,currentMinute,currentWeekday);
-    // }
+    function getCurrentTime() public view returns (uint8, uint8) {
+        uint8 currentHour = getHour(block.timestamp);
+        uint8 currentMinute = getMinute(block.timestamp);
+        return (currentHour, currentMinute);
+    }
 }

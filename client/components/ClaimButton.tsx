@@ -1,13 +1,36 @@
 import { usePrepareContractWrite, useContractWrite } from 'wagmi'
 import { ABI_WakeMeUp, goerliContract } from '../lib';
+import { Dispatch, SetStateAction } from 'react';
+import { waitForTransaction } from '@wagmi/core'
 
-export const ClaimButton = () => {
+export const ClaimButton = ({ setValidated, update, setUpdate }: {
+    setValidated: Dispatch<SetStateAction<boolean>>
+    update: boolean
+    setUpdate: Dispatch<SetStateAction<boolean>>
+}) => {
     const { config, error } = usePrepareContractWrite({
         address: goerliContract,
         abi: ABI_WakeMeUp,
-        functionName: 'withdraw',
+        functionName: 'claim',
     })
-    const { data, isLoading, isSuccess, write } = useContractWrite(config)
+
+    const { data, isLoading, isSuccess, write } = useContractWrite({
+        address: goerliContract,
+        abi: ABI_WakeMeUp,
+        functionName: 'claim',
+        onSuccess(data) {
+            waitForClaim(data.hash)
+        }
+    })
+
+    const waitForClaim = async (hash: any) => {
+        const data = await waitForTransaction({
+            hash,
+        })
+        setUpdate(!update)
+        setValidated(false)
+
+    }
 
     return (
         <div className="border-gray-400 flex flex-row mb-2">

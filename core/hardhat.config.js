@@ -15,6 +15,10 @@ module.exports = {
       goerli: {
          url: API_URL,
          accounts: [`0x${PRIVATE_KEY}`]
+      },
+      optimismGoerli: {
+        url: API_URL,
+        accounts: [`0x${PRIVATE_KEY}`]
       }
   },
   etherscan: {

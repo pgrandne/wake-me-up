@@ -1,15 +1,34 @@
 import { useSendTransaction } from 'wagmi'
 import { goerliContract } from '../lib'
 import { parseEther } from 'viem'
+import { waitForTransaction } from '@wagmi/core'
+import { Dispatch, SetStateAction, useState } from 'react'
 
-export const CardDeposit = () => {
-    const { isLoading, isSuccess, sendTransaction } = useSendTransaction({
+export const CardDeposit = ({ setBalance, update, setUpdate }: {
+    setBalance: Dispatch<SetStateAction<number>>
+    update: boolean
+    setUpdate: Dispatch<SetStateAction<boolean>>
+}) => {
+    const [loading, setLoading] = useState(false)
+    const { data, sendTransaction } = useSendTransaction({
         to: goerliContract,
         value: parseEther('0.05'),
+        onSuccess(data) {
+            waitForDeposit(data.hash)
+        },
     })
 
+    const waitForDeposit = async (hash: any) => {
+        const data = await waitForTransaction({
+            hash,
+        })
+        setBalance(5000000000000000)
+        setUpdate(!update)
+        setLoading(false)
+    }
+
     return (
-        <div className="container flex mx-auto my-auto w-full items-center justify-center">
+        <div className="card">
             <div className="flex flex-col bg-gray-300 p-4">
                 <p className="font-medium text-center">You have to deposit 0.05 eth (~$90)</p>
                 <p className="font-medium text-center">to wake up 10 times:</p>
@@ -17,12 +36,15 @@ export const CardDeposit = () => {
                 <div className="border-gray-400 flex flex-row mb-2">
                     <div
                         className=" mt-5 select-none cursor-pointer bg-gray-200 rounded-md flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
-                        onClick={() => sendTransaction()}
+                        onClick={() => {
+                            setLoading(true)
+                            sendTransaction()
+                        }}
                     >
                         <div className="flex flex-col rounded-md w-10 h-10 bg-gray-300 justify-center items-center mr-4">💸</div>
                         <div className="flex-1 pl-1 mr-16">
-                            {!isLoading && <div className="font-medium">Deposit 0.05 eth</div>}
-                            {isLoading && <svg
+                            {!loading && <div className="font-medium">Deposit 0.05 eth</div>}
+                            {loading && <svg
                                 className="animate-spin ml-4 mr-3 h-5 w-5 text-white"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
