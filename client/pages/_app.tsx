@@ -4,16 +4,18 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
+  goerli,
   baseGoerli,
   optimismGoerli,
   zoraTestnet,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { modeTest } from '../components/chains';
+import { modeTest } from '../lib/chains';
 import { AppProps } from 'next/app';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
+    goerli,
     baseGoerli,
     modeTest,
     optimismGoerli,
