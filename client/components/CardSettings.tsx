@@ -12,6 +12,16 @@ export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
     contractAddress: `0x${string}`
 }) => {
 
+    const calculateTimeZoneDif = (localHour: number) => {
+        const diff = new Date().getTimezoneOffset() / 60
+        if ((localHour - diff) > 0 && (localHour - diff) < 24)
+            return (localHour - diff)
+        else if ((localHour - diff) > 0)
+            return (localHour - diff + 24)
+        else
+            return (localHour - diff - 24)
+    }
+
     const [loading, setLoading] = useState(false)
     const [schedule, setSchedule] = useState({
         wakeupWeekHour: 0,
@@ -34,7 +44,7 @@ export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
         address: contractAddress,
         abi: ABI_WakeMeUp,
         functionName: 'scheduleWakeup',
-        args: [scheduleWeek.wakeupHour, scheduleWeek.wakeupMinute, scheduleWeekend.wakeupHour, scheduleWeekend.wakeupMinute],
+        args: [calculateTimeZoneDif(scheduleWeek.wakeupHour), scheduleWeek.wakeupMinute, calculateTimeZoneDif(scheduleWeekend.wakeupHour), scheduleWeekend.wakeupMinute],
         onSuccess(data) {
             waitForSchedule(data.hash)
         },
@@ -103,6 +113,8 @@ export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
                         onClick={() => {
                             setLoading(true)
                             write?.()
+                            setLoading(false)
+
                         }}
                     >
                         <div className="select-none cursor-pointer bg-gray-200 rounded-md flex flex-1 justify-center items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
