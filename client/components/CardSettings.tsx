@@ -4,6 +4,7 @@ import { ABI_WakeMeUp } from '../lib';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { SelectTime } from "./SelectTime";
 import { waitForTransaction } from '@wagmi/core'
+import { toast } from 'react-toastify';
 
 export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
     account: `0x${string}` | undefined
@@ -46,6 +47,7 @@ export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
         functionName: 'scheduleWakeup',
         args: [calculateTimeZoneDif(scheduleWeek.wakeupHour), scheduleWeek.wakeupMinute, calculateTimeZoneDif(scheduleWeekend.wakeupHour), scheduleWeekend.wakeupMinute],
         onSuccess(data) {
+            notifySubmitted()
             waitForSchedule(data.hash)
         },
         onError() {
@@ -59,6 +61,7 @@ export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
         })
         setUpdate(!update)
         setLoading(false)
+        notifySaved()
     }
 
     const [claim, setClaim] = useState(false)
@@ -83,6 +86,9 @@ export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
     useEffect(() => {
         checkSchedule()
     }, [schedule]);
+
+    const notifySubmitted = () => toast("🦄 Wake Up Time Submitted !");
+    const notifySaved = () => toast("🦄 Saved, you can close the page, see you tomorrow!");
 
     return (
         <>
@@ -113,8 +119,6 @@ export const CardSettings = ({ account, update, setUpdate, contractAddress }: {
                         onClick={() => {
                             setLoading(true)
                             write?.()
-                            setLoading(false)
-
                         }}
                     >
                         <div className="select-none cursor-pointer bg-gray-200 rounded-md flex flex-1 justify-center items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">

@@ -2,6 +2,7 @@ import { usePrepareContractWrite, useContractWrite } from 'wagmi'
 import { ABI_WakeMeUp } from '../lib';
 import { Dispatch, SetStateAction } from 'react';
 import { waitForTransaction } from '@wagmi/core'
+import { toast } from 'react-toastify';
 
 export const ClaimButton = ({ setValidated, update, setUpdate, contractAddress }: {
     setValidated: Dispatch<SetStateAction<boolean>>
@@ -20,6 +21,7 @@ export const ClaimButton = ({ setValidated, update, setUpdate, contractAddress }
         abi: ABI_WakeMeUp,
         functionName: 'claim',
         onSuccess(data) {
+            notifyRequest()
             waitForClaim(data.hash)
         }
     })
@@ -30,8 +32,11 @@ export const ClaimButton = ({ setValidated, update, setUpdate, contractAddress }
         })
         setUpdate(!update)
         setValidated(false)
-
+        notifyClaimed()
     }
+
+    const notifyRequest = () => toast("🦄 Request Submitted !");
+    const notifyClaimed = () => toast("🦄 Claimed!");
 
     return (
         <div className="border-gray-400 flex flex-row mb-2">

@@ -2,6 +2,7 @@ import { useSendTransaction } from 'wagmi'
 import { parseEther } from 'viem'
 import { waitForTransaction } from '@wagmi/core'
 import { Dispatch, SetStateAction, useState } from 'react'
+import { toast } from 'react-toastify';
 
 export const CardDeposit = ({ setBalance, update, setUpdate, contractAddress }: {
     setBalance: Dispatch<SetStateAction<number>>
@@ -14,6 +15,7 @@ export const CardDeposit = ({ setBalance, update, setUpdate, contractAddress }: 
         to: contractAddress,
         value: parseEther('0.05'),
         onSuccess(data) {
+            notifyDeposit()
             waitForDeposit(data.hash)
         },
         onError(data) {
@@ -28,7 +30,11 @@ export const CardDeposit = ({ setBalance, update, setUpdate, contractAddress }: 
         setBalance(5000000000000000)
         setUpdate(!update)
         setLoading(false)
+        notifyConfirmed()
     }
+
+    const notifyDeposit = () => toast("🦄 Deposit Submitted !");
+    const notifyConfirmed = () => toast("🦄 Deposit Confirmed!");
 
     return (
         <div className="card">

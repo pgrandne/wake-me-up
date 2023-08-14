@@ -2,14 +2,16 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { CardLayer, ModalInfo } from '../components';
-import { useAccount, useNetwork, } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { switchNetwork } from '@wagmi/core'
 import { logo, github, info } from '../lib';
 import Image from 'next/image'
 import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Home: NextPage = () => {
-
   const [connected, setConnected] = useState(false)
   const [modalInfo, setModalInfo] = useState(false)
   const { chain } = useNetwork()
@@ -85,6 +87,7 @@ const Home: NextPage = () => {
         </div>
         {modalInfo && <ModalInfo setModalInfo={setModalInfo} />}
       </main >
+      <ToastContainer position="bottom-right" />
     </div >
   );
 };
