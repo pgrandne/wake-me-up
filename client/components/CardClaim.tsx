@@ -1,16 +1,17 @@
 import { Balance, ClaimButton } from ".";
 import { useContractRead } from 'wagmi'
-import { ABI_WakeMeUp, goerliContract } from '../lib';
+import { ABI_WakeMeUp } from '../lib';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-export const CardClaim = ({ account, update, setUpdate }: {
+export const CardClaim = ({ account, update, setUpdate, contractAddress }: {
     account: `0x${string}` | undefined;
     update: boolean
     setUpdate: Dispatch<SetStateAction<boolean>>
+    contractAddress: `0x${string}`
 }) => {
     const [validated, setValidated] = useState(false)
     const { data, isError, isLoading } = useContractRead({
-        address: goerliContract,
+        address: contractAddress,
         abi: ABI_WakeMeUp,
         functionName: 'checkClaim',
         args: [account],
@@ -22,8 +23,8 @@ export const CardClaim = ({ account, update, setUpdate }: {
     return (
         <div className="card">
             <div className="flex flex-col bg-gray-300 p-4">
-                <Balance account={account} />
-                {validated && <ClaimButton setValidated={setValidated} update={update} setUpdate={setUpdate} />}
+                <Balance account={account} contractAddress={contractAddress} />
+                {validated && <ClaimButton setValidated={setValidated} update={update} setUpdate={setUpdate} contractAddress={contractAddress} />}
                 {!validated &&
                     <div className="border-gray-400 flex flex-row mb-2">
                         <div className=" mt-5 bg-red-400 rounded-md flex flex-1 items-center p-4">

@@ -1,12 +1,16 @@
 import { useContractRead } from 'wagmi'
-import { ABI_WakeMeUp, goerliContract } from '../lib';
+import { ABI_WakeMeUp } from '../lib';
 import { useState } from 'react';
 import { formatEther } from 'viem'
 
-export const Balance = ({ account }: { account: `0x${string}` | undefined; }) => {
+export const Balance = ({ account, contractAddress }: {
+    account: `0x${string}` | undefined
+    contractAddress: `0x${string}`
+
+}) => {
     const [balance, setBalance] = useState("0")
     const { data, isError, isLoading } = useContractRead({
-        address: goerliContract,
+        address: contractAddress,
         abi: ABI_WakeMeUp,
         functionName: 'balanceOfAccount',
         args: [account],

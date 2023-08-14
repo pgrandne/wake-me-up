@@ -1,21 +1,22 @@
 import { usePrepareContractWrite, useContractWrite } from 'wagmi'
-import { ABI_WakeMeUp, goerliContract } from '../lib';
+import { ABI_WakeMeUp } from '../lib';
 import { Dispatch, SetStateAction } from 'react';
 import { waitForTransaction } from '@wagmi/core'
 
-export const ClaimButton = ({ setValidated, update, setUpdate }: {
+export const ClaimButton = ({ setValidated, update, setUpdate, contractAddress }: {
     setValidated: Dispatch<SetStateAction<boolean>>
     update: boolean
     setUpdate: Dispatch<SetStateAction<boolean>>
+    contractAddress: `0x${string}`
 }) => {
     const { config, error } = usePrepareContractWrite({
-        address: goerliContract,
+        address: contractAddress,
         abi: ABI_WakeMeUp,
         functionName: 'claim',
     })
 
     const { data, isLoading, isSuccess, write } = useContractWrite({
-        address: goerliContract,
+        address: contractAddress,
         abi: ABI_WakeMeUp,
         functionName: 'claim',
         onSuccess(data) {

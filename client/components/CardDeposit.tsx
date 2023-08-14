@@ -1,21 +1,24 @@
 import { useSendTransaction } from 'wagmi'
-import { goerliContract } from '../lib'
 import { parseEther } from 'viem'
 import { waitForTransaction } from '@wagmi/core'
 import { Dispatch, SetStateAction, useState } from 'react'
 
-export const CardDeposit = ({ setBalance, update, setUpdate }: {
+export const CardDeposit = ({ setBalance, update, setUpdate, contractAddress }: {
     setBalance: Dispatch<SetStateAction<number>>
     update: boolean
     setUpdate: Dispatch<SetStateAction<boolean>>
+    contractAddress: string
 }) => {
     const [loading, setLoading] = useState(false)
     const { data, sendTransaction } = useSendTransaction({
-        to: goerliContract,
+        to: contractAddress,
         value: parseEther('0.05'),
         onSuccess(data) {
             waitForDeposit(data.hash)
         },
+        onError(data) {
+            setLoading(false)
+        }
     })
 
     const waitForDeposit = async (hash: any) => {

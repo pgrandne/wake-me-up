@@ -1,5 +1,21 @@
-export const contractAddress = () => {
-    console.log()
+const optimismGoerli = "0x47579267a80115b0fBc7b4FF35Cef538738dD036"
+const baseGoerli = "0x6925A6A9b4e73769734F4644DE07169FBC5f0C57"
+const modeGoerli = "0xb577ED8dB5a965815b53d5141A83D1DEed438DBC"
+
+export const getContractAddress = (chainId:number) => {
+    switch (chainId) {
+        case 420:
+            return optimismGoerli
+
+        case 919:
+            return modeGoerli
+
+        case 84531:
+            return baseGoerli
+
+        default:
+              return optimismGoerli
+    }
 }
 
 
