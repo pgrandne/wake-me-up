@@ -4,7 +4,6 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
-  goerli,
   baseGoerli,
   optimismGoerli,
   zoraTestnet,
@@ -15,7 +14,6 @@ import { AppProps } from 'next/app';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
-    goerli,
     baseGoerli,
     modeTest,
     optimismGoerli,
@@ -25,7 +23,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'Arbitrage for everyone',
+  appName: 'Wake Me Up!',
   projectId: "fb7b2551fca10844d290c9ed6383747f",
   chains,
 });
