@@ -8,8 +8,7 @@ export const CardLayer = ({ account }: { account: `0x${string}` }) => {
     const [balance, setBalance] = useState(0)
     const [update, setUpdate] = useState(false)
     const { chain } = useNetwork()
-    const contractAddress = getContractAddress(chain!.id)
-
+    const contractAddress = getContractAddress(chain?.id)
 
     useEffect(() => { }, [update])
 

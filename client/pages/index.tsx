@@ -1,16 +1,17 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { CardLayer } from '../components';
+import { CardLayer, ModalInfo } from '../components';
 import { useAccount, useNetwork, } from 'wagmi';
 import { switchNetwork } from '@wagmi/core'
-import { logo, github } from '../lib';
+import { logo, github, info } from '../lib';
 import Image from 'next/image'
 import { useEffect, useState } from 'react';
 
 const Home: NextPage = () => {
 
   const [connected, setConnected] = useState(false)
+  const [modalInfo, setModalInfo] = useState(false)
   const { chain } = useNetwork()
 
   const network = async () => {
@@ -51,8 +52,7 @@ const Home: NextPage = () => {
           <ConnectButton />
         </div>
         <div className="h-1/6 flex justify-center">
-
-          <h1 className="my-auto  text-5xl">
+          <h1 className="mt-20 text-indigo-500 my-auto text-5xl font-bold">
             Wake Me Up!
           </h1>
         </div>
@@ -67,12 +67,23 @@ const Home: NextPage = () => {
             rel="noreferrer"
           >
             <Image
-              className="h-8 object-contain cursor-pointer hover:opacity-100"
+              className="h-8 object-contain cursor-pointer opacity-70 hover:opacity-100"
               src={github}
               alt="github"
             />
           </a>
+          <div
+            onClick={() => {
+              setModalInfo(true)
+            }}>
+            <Image
+              className="h-8 object-contain cursor-pointer opacity-70 hover:opacity-100"
+              src={info}
+              alt="Info"
+            />
+          </div>
         </div>
+        {modalInfo && <ModalInfo setModalInfo={setModalInfo} />}
       </main >
     </div >
   );

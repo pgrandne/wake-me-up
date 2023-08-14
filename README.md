@@ -55,4 +55,3 @@ $ cd wake-me-up
 $ npm install
 ```
 3. Rename the .env.example file to .env and complete the constants
-
